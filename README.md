@@ -22,7 +22,7 @@ Compile and install OpenCog, see http://wiki.opencog.org/w/Building_OpenCog
 Usage
 -----
 
-# 1. Copy your data file(s) under
+### 1. Copy your data file(s) under
 
     <fs-moses-bio-experiments>/data
     
@@ -31,7 +31,7 @@ first column is the target variable. The other columns are the
 inputs. The first row is the header (output and input names), and the
 following rows the observations.
 
-# 2. Set your setting file(s)
+### 2. Set your setting file(s)
 Fill a setting file with your experimental settings and place it under
 directory
 
@@ -39,7 +39,7 @@ directory
     
 You may find examples in that directory
 
-# 3. Run experiment
+### 3. Run experiment
 
 go under the directory
 
@@ -53,7 +53,7 @@ That script is gonna create a directory $exp_dir as specified in the
 setting file and place a bunch of intermediary files under it produced
 during the experiment.
 
-# 4. Analyze experiment
+### 4. Analyze experiment
 
 still under
 
