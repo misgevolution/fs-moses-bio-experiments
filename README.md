@@ -22,51 +22,48 @@ Compile and install OpenCog, see http://wiki.opencog.org/w/Building_OpenCog
 Usage
 -----
 
-1. Copy your data file(s) under
+# 1. Copy your data file(s) under
 
-<fs-moses-bio-experiments>/data
-
+    <fs-moses-bio-experiments>/data
+    
 your data file(s) must be in a TSV format (Tab Seperated Value). The
 first column is the target variable. The other columns are the
 inputs. The first row is the header (output and input names), and the
 following rows the observations.
 
-2. Set your setting file(s)
-
+# 2. Set your setting file(s)
 Fill a setting file with your experimental settings and place it under
 directory
 
-<fs-moses-bio-experiments>/settings
-
+    <fs-moses-bio-experiments>/settings
+    
 You may find examples in that directory
 
-3. Run experiment
+# 3. Run experiment
 
 go under the directory
 
-<fs-moses-bio-experiments>/experiments
+    <fs-moses-bio-experiments>/experiments
 
 and run
 
-../scripts/run_exp.sh ../settings/MY_SETTINGS &> MY_EXP.log
+    ../scripts/run_exp.sh ../settings/MY_SETTINGS &> MY_EXP.log
 
 That script is gonna create a directory $exp_dir as specified in the
 setting file and place a bunch of intermediary files under it produced
 during the experiment.
 
-4. Analyze experiment
+# 4. Analyze experiment
 
 still under
 
-<fs-moses-bio-experiments>/experiments
+    <fs-moses-bio-experiments>/experiments
+    
+run
 
-../scripts/anal_exp.sh ../settings/MY_SETTINGS &> MY_EXP_ANALYSIS.log
+    ../scripts/anal_exp.sh ../settings/MY_SETTINGS &> MY_EXP_ANALYSIS.log
 
 That script is gonna create more intermediary files and finally under
-$exp_dir 2 files
-
-results.csv, the results in terms of precision, recall and diversity
-of all experiments.
-
-avg_results.csv, averaging of results.csv across all folds and random
-seeds.
+$exp_dir 2 files: results.csv, the results in terms of precision,
+recall and diversity of all experiments.  avg_results.csv, averaging
+of results.csv across all folds and random seeds.
