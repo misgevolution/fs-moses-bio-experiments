@@ -14,6 +14,10 @@ set -u
 . $1
 
 # Sanity checks
+if [[ ${#nfeats_seq[@]} != 1 && ${#conf_seq[@]} != 1 ]]; then
+    echo "At least one of nfeats_seq or conf_seq must have only 1 element"
+    exit 1
+fi
 if [[ ${#fsm_nfeats_seq[@]} != 1 && ${#fsm_conf_seq[@]} != 1 ]]; then
     echo "At least one of fsm_nfeats_seq or fsm_conf_seq must have only 1 element"
     exit 1
@@ -37,7 +41,7 @@ bnd=$(basename $dataset)
 # Experiment main loop #
 ########################
 
-n_exp=$((${#nfeats_seq[@]} * Kfd * ${#rand_seq[@]}))
+n_exp=$((${#nfeats_seq[@]} * ${#conf_seq[@]} * Kfd * ${#rand_seq[@]}))
 if [[ $no_fsm == false ]]; then
     n_exp=$((n_exp + Kfd * ${#rand_seq[@]} * ${#fsm_nfeats_seq[@]} * ${#fsm_conf_seq[@]} * ${#focus_seq[@]} * ${#seed_seq[@]} * ${#smp_pbty_seq[@]} * ${#fsm_scorer_seq[@]}))
 fi
@@ -77,28 +81,57 @@ for r in ${rand_seq[@]}; do
         #####################
 
         for nfeats in ${nfeats_seq[@]}; do
-            ((ei++))
-            echo
-            echo "~~~~ Learning (no fsm, pre-fs = $nfeats, $ei/$n_exp) ~~~~"
-            date
+            for conf in ${conf_seq[@]}; do
+                ((ei++))
+                message="~~~~ Learning (no fsm, "
+                if [[ $pfs_algo == hc ]]; then
+                    message+="pre-conf = $conf"
+                else
+                    message+="pre-nfeats = $nfeats"
+                fi
+                message+=", $ei/$n_exp) ~~~~"
+                echo
+                echo "$message"
+                date
 
-            learn_base_name_no_fs=r${r}_fd_${fd}to${Kfd}_nfeats_${nfeats}_no_fsm
+                learn_base_name_no_fs="r${r}_fd_${fd}to${Kfd}_"
+                if [[ $pfs_algo == hc ]]; then
+                    learn_base_name_no_fs+="conf_${conf}"
+                else
+                    learn_base_name_no_fs+="nfeats_${nfeats}"
+                fi
+                learn_base_name_no_fs+="_no_fsm"
 
-            # pre-filter dataset
-            filtered_file=${ifile}_filtered_nfeats_$nfeats
-            fs_lfile=$exp_dir/log/feature_selection_${learn_base_name_no_fs}.log
-            FCMD="feature-selection"
-            FPO="-a $pfs_algo --target-size $nfeats -i $ifile -o $filtered_file -j $jobs -F $fs_lfile -l debug"
-            echo "$FCMD $FPO"
-            $FCMD $FPO
+                # pre-filter dataset
+                filtered_file="${ifile}_filtered_"
+                if [[ $pfs_algo == hc ]]; then
+                    filtered_file+="conf_${conf}"
+                else
+                    filtered_file+="nfeats_${nfeats}"
+                fi
+                fs_lfile=$exp_dir/log/feature_selection_${learn_base_name_no_fs}.log
+                FCMD="feature-selection"
 
-            # specific program options to the experiment
-            rfile="$exp_dir/res/${learn_base_name_no_fs}.moses"
-            lfile="$exp_dir/log/${learn_base_name_no_fs}.log"
-            SPO="-i $filtered_file -o $rfile -f $lfile"
+                FPO="-a $pfs_algo"
+                if [[ $pfs_algo == hc ]]; then
+                    FPO+=" --mi-penalty -$conf"
+                    FPO+=" --max-evals $hc_evals"
+                else
+                    FPO+=" --target-size $nfeats"
+                fi
+                FPO+=" -i $ifile -o $filtered_file -j $jobs -F $fs_lfile -l debug"
 
-            echo "$CMD $GPO $LPO $SPO"
-            $CMD $GPO $LPO $SPO
+                echo "$FCMD $FPO"
+                $FCMD $FPO
+
+                # specific program options to the experiment
+                rfile="$exp_dir/res/${learn_base_name_no_fs}.moses"
+                lfile="$exp_dir/log/${learn_base_name_no_fs}.log"
+                SPO="-i $filtered_file -o $rfile -f $lfile"
+
+                echo "$CMD $GPO $LPO $SPO"
+                $CMD $GPO $LPO $SPO
+            done
         done
 
         ##################
@@ -117,9 +150,9 @@ for r in ${rand_seq[@]}; do
                                 ((ei++))
                                 message="~~~~ Learning (feature selection"
                                 if [[ $fsm_algo == hc ]]; then
-                                    message+=" conf = $fsm_conf,"
+                                    message+=" fsm_conf = $fsm_conf,"
                                 else
-                                    message+=" nfeats = $fsm_nfeats,"
+                                    message+=" fsm_nfeats = $fsm_nfeats,"
                                 fi
                                 message+=" focus = $focus, seed = $seed, smp_pbty = $smp_pbty, fsm_algo = $fsm_algo, fsm_scorer = $fsm_scorer, $ei/$n_exp) ~~~~"
                                 echo
@@ -151,9 +184,10 @@ for r in ${rand_seq[@]}; do
                                     FSPO+=" --fs-inc-redundant-intensity $inc_red_intensity"
                                 elif [[ $fsm_algo == hc ]]; then
                                     FSPO+=" --fs-hc-max-evals $hc_evals"
-                                    FSPO+=" --fs-mi-penalty $fsm_conf"
+                                    FSPO+=" --fs-mi-penalty -$fsm_conf"
                                     FSPO+=" --fs-hc-widen-search $hc_widen_search"
                                     FSPO+=" --fs-hc-crossover $hc_crossover"
+                                    FSPO+=" --fs-hc-crossover-pop-size $hc_crossover_pop_size"
                                 fi
                                 
                                 # scorer

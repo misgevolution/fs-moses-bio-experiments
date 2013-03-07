@@ -17,11 +17,15 @@ PROG_DIR=$(dirname "$PROG_PATH")
 
 set -x
 
-groups="pre_nfeats,"
-if [[ $fsm_algo == hc ]]; then
-    groups+="fsm_conf"
+if [[ $pfs_algo == hc ]]; then
+    groups="pre_conf"
 else
-    groups+="fsm_nfeats"
+    groups="pre_nfeats"
+fi
+if [[ $fsm_algo == hc ]]; then
+    groups+=",fsm_conf"
+else
+    groups+=",fsm_nfeats"
 fi
 groups+=",focus"
 

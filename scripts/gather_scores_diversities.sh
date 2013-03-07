@@ -27,11 +27,16 @@ fi
 ################
 # write header #
 ################
-header="fold,rand,pre_nfeats,"
-if [[ $fsm_algo == hc ]]; then
-    header+="fsm_conf"
+header="fold,rand"
+if [[ $pfs_algo == hc ]]; then
+    header+=",pre_conf"
 else
-    header+="fsm_nfeats"
+    header+=",pre_nfeats"
+fi
+if [[ $fsm_algo == hc ]]; then
+    header+=",fsm_conf"
+else
+    header+=",fsm_nfeats"
 fi
 header+=",focus"
 for smp in $samples; do
@@ -58,22 +63,30 @@ for fold in $(seq 1 $Kfd); do
         # No fsm #
         ##########
         for pre_nfeats in ${nfeats_seq[@]}; do
-            fn=$res_dir/${rs}_fd_${fds}_nfeats_${pre_nfeats}_no_fsm
-            # settings
-            content="$fold,$rand,$pre_nfeats,none,none"
-            # score
-            for smp in $samples; do
-                for sc in precision recall; do
-                    sc_file=${fn}_${smp}_${sc}.stats
-                    sc_mean=$(grep_stat mean $sc_file)
-                    content+=",$sc_mean"
+            for pre_conf in ${conf_seq[@]}; do
+                fn=$res_dir/${rs}_fd_${fds}_nfeats_${pre_nfeats}_no_fsm
+                # settings
+                content="$fold,$rand,"
+                if [[ $pfs_algo == hc ]]; then
+                    content+="$pre_conf"
+                else
+                    content+="$pre_nfeats"
+                fi
+                content+=",none,none"
+                # score
+                for smp in $samples; do
+                    for sc in precision recall; do
+                        sc_file=${fn}_${smp}_${sc}.stats
+                        sc_mean=$(grep_stat mean $sc_file)
+                        content+=",$sc_mean"
+                    done
                 done
+                # diversity
+                dfile=${fn}.diversity
+                dmean=$(grep_stat mean $dfile)
+                content+=",$dmean"
+                echo "$content"
             done
-            # diversity
-            dfile=${fn}.diversity
-            dmean=$(grep_stat mean $dfile)
-            content+=",$dmean"
-            echo "$content"
         done
 
         #######

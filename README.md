@@ -12,7 +12,7 @@ Requirements
 - OpenCog (in particular moses and feature-selection). You can use the
   latest version on github https://github.com/opencog/opencog
   Or, to be sure that you can reproduce the experiments the revision
-  4581cf94d9e7c19f1577d76e2b0a20735c668347
+  beca40c6e1de86550e751db86138921fdb193d9d
 
 Installation
 ------------
