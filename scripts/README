@@ -1,0 +1,7 @@
+Set of scripts to run feature selection within moses (fsm) experiments
+and analyze the results.
+
+The main 2 scripts are run_exp.sh and anal_exp.sh to run and analyze
+an experiment.
+
+

@@ -1,0 +1,3 @@
+Put your data here (tab seperated value file format, first column is
+the target, other columns are input features and each row is an
+observation).
