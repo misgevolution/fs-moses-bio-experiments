@@ -116,6 +116,8 @@ for r in ${rand_seq[@]}; do
                 if [[ $pfs_algo == hc ]]; then
                     FPO+=" --mi-penalty -$conf"
                     FPO+=" --max-evals $hc_evals"
+                    FPO+=" --hc-crossover $hc_crossover"
+                    FPO+=" --hc-crossover-pop-size $hc_crossover_pop_size"
                 else
                     FPO+=" --target-size $nfeats"
                 fi

@@ -9,6 +9,8 @@ if [[ $# != 1 ]]; then
     exit 1
 fi
 
+# debug trace
+# set -x
 set -u
 
 . $1
@@ -47,9 +49,6 @@ done
 header+=",diversity"
 echo "$header"
 
-# debug trace
-# set -x
-
 #################
 # write content #
 #################
@@ -64,7 +63,13 @@ for fold in $(seq 1 $Kfd); do
         ##########
         for pre_nfeats in ${nfeats_seq[@]}; do
             for pre_conf in ${conf_seq[@]}; do
-                fn=$res_dir/${rs}_fd_${fds}_nfeats_${pre_nfeats}_no_fsm
+                fn="$res_dir/${rs}_fd_${fds}_"
+                if [[ $pfs_algo == hc ]]; then
+                    fn+="conf_$pre_conf"
+                else
+                    fn+="nfeats_$pre_nfeats"
+                fi
+                fn+="_no_fsm"
                 # settings
                 content="$fold,$rand,"
                 if [[ $pfs_algo == hc ]]; then
