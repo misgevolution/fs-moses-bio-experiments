@@ -29,6 +29,7 @@ fi
 ################
 # write header #
 ################
+# settings
 header="fold,rand"
 if [[ $pfs_algo == hc ]]; then
     header+=",pre_conf"
@@ -41,12 +42,13 @@ else
     header+=",fsm_nfeats"
 fi
 header+=",focus"
+# results
 for smp in $samples; do
     for sc in precision recall; do
-        header+=",mean_${sc}_${smp}"
+        header+=",${sc}_${smp}"
     done
 done
-header+=",diversity"
+header+=",diversity,complexity"
 echo "$header"
 
 #################
@@ -90,6 +92,11 @@ for fold in $(seq 1 $Kfd); do
                 dfile=${fn}.diversity
                 dmean=$(grep_stat mean $dfile)
                 content+=",$dmean"
+                # complexity
+                cfile=${fn}.complexity
+                cmean=$(grep_stat mean $cfile)
+                content+=",$cmean"
+                # print content
                 echo "$content"
             done
         done
@@ -134,6 +141,11 @@ for fold in $(seq 1 $Kfd); do
                                 dfile=${fn}.diversity
                                 dmean=$(grep_stat mean $dfile)
                                 content+=",$dmean"
+                                # complexity
+                                cfile=${fn}.complexity
+                                cmean=$(grep_stat mean $cfile)
+                                content+=",$cmean"
+                                # print content
                                 echo "$content"
                             done
                         done

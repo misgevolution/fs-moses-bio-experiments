@@ -17,6 +17,7 @@ PROG_DIR=$(dirname "$PROG_PATH")
 
 set -x
 
+# settings group
 if [[ $pfs_algo == hc ]]; then
     groups="pre_conf"
 else
@@ -37,9 +38,9 @@ fi
 CMD="mean_group $2 $groups"
 for smp in $samples; do
     for sc in precision recall; do
-        CMD+=" mean_${sc}_${smp}"
+        CMD+=" ${sc}_${smp}"
     done
 done
-CMD+=" diversity"
+CMD+=" diversity complexity"
 
 $CMD

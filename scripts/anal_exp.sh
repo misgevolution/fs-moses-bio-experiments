@@ -23,11 +23,14 @@ $PROG_DIR/eval_all_moses_output.sh $1
 # Eval all outputs and sum them up in stats files
 $PROG_DIR/eval_train_test_mean_score.sh $1
 
-# Eval the diversity of the 10 top candidates for each experiment
+# Eval the diversity of the top 10 candidates for each experiment
 $PROG_DIR/eval_diversity.sh $1
 
+# Eval complexity of the top 10 candidates for each experiment
+$PROG_DIR/eval_complexity_stats.sh $1
+
 # Create CSV file with the results of all experiments
-$PROG_DIR/gather_scores_diversities.sh $1 > $exp_dir/results.csv
+$PROG_DIR/gather_scores_diversities_complexities.sh $1 > $exp_dir/results.csv
 
 # Summarize the CSV file averaging over folds and random seeds
 $PROG_DIR/group_mean_by_settings.sh $1 $exp_dir/results.csv > $exp_dir/avg_results.csv
