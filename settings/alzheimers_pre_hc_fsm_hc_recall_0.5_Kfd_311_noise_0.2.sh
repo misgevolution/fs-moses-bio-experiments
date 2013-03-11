@@ -6,7 +6,7 @@
 dataset=../data/alzheimers.moses
 
 # directory name of the experiment
-exp_dir=alzheimers_pre_hc_fsm_hc_recall_0.5_Kfd_10_noise_0.2
+exp_dir=alzheimers_pre_hc_fsm_hc_recall_0.5_Kfd_311_noise_0.2
 
 # K-fold cross validation (if 1, no cross-validation)
 Kfd=311
