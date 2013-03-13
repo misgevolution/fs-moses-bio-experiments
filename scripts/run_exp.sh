@@ -13,6 +13,10 @@ set -u
 # Source settings
 . $1
 
+PROG_PATH=$(readlink -f "$0")
+PROG_DIR=$(dirname "$PROG_PATH")
+. $PROG_DIR/common.sh
+
 # Sanity checks
 if [[ ${#nfeats_seq[@]} != 1 && ${#conf_seq[@]} != 1 ]]; then
     echo "At least one of nfeats_seq or conf_seq must have only 1 element"
@@ -35,7 +39,7 @@ mkdir -p $exp_dir/log           # moses logs
 ###########################################################
 cp $dataset $exp_dir/data
 bnd=$(basename $dataset)
-../scripts/kfold.sh $exp_dir/data/$bnd $Kfd
+$PROG_DIR/kfold.sh $exp_dir/data/$bnd $Kfd
 
 ########################
 # Experiment main loop #

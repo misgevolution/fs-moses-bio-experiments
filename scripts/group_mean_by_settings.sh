@@ -15,7 +15,8 @@ PROG_PATH=$(readlink -f "$0")
 PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
-set -x
+set -u                          # cannot read unwritten variables
+# set -x                          # enable trace
 
 # settings group
 if [[ $pfs_algo == hc ]]; then

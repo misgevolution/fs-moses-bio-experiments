@@ -41,13 +41,14 @@ You may find examples in that directory
 
 ### 3. Run experiment
 
-go under the directory
+Create a directory for your experiments
 
-    <fs-moses-bio-experiments>/experiments
+    mkdir MY_EXPERIMENTS
+    cd MY_EXPERIMENTS
 
-and run
+for instance besides the project directory <fs-moses-bio-experiments>, and run
 
-    ../scripts/run_exp.sh ../settings/MY_SETTINGS &> MY_EXP.log
+    <fs-moses-bio-experiments>/scripts/run_exp.sh <fs-moses-bio-experiments>/settings/MY_SETTINGS &> MY_EXP.log
 
 That script is gonna create a directory $exp_dir as specified in the
 setting file and place a bunch of intermediary files under it produced
@@ -55,13 +56,13 @@ during the experiment.
 
 ### 4. Analyze experiment
 
-still under
+while still under
 
-    <fs-moses-bio-experiments>/experiments
+    MY_EXPERIMENTS
     
 run
 
-    ../scripts/anal_exp.sh ../settings/MY_SETTINGS &> MY_EXP_ANALYSIS.log
+    <fs-moses-bio-experiments>/scripts/anal_exp.sh <fs-moses-bio-experiments>/settings/MY_SETTINGS &> MY_EXP_ANALYSIS.log
 
 That script is gonna create more intermediary files and finally under
 $exp_dir 2 files: results.csv, the results in terms of precision,
