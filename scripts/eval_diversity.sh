@@ -16,7 +16,7 @@ PROG_DIR=$(dirname "$PROG_PATH")
 
 bnd=$(basename $dataset)
 
-for p in $(uniq_prefixes "$exp_dir/res" "_cnd_*_train.csv"); do
+for p in $(uniq_prefixes "$exp_dir/res/" "_cnd_*_train.csv"); do
     CMD="eval-diversity -u out --display-stats 1 --diversity-dst tanimoto"
     for cnd in $(seq 0 $(($candidates - 1))); do
         CMD+=" -i ${p}_cnd_${cnd}_train.csv"

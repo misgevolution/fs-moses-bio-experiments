@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Parse and evaluate all models obtained during th experiment
+# Parse and evaluate all models obtained during the experiment
 
 if [[ $# != 1 ]]; then
     echo "Error: wrong number of command parameters"

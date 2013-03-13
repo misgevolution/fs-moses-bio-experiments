@@ -36,11 +36,19 @@ pad() {
     printf "$pad_expression" "$1"    
 }
 
-# get the unique list of prefixes of file names in dir $1 ending by
-# $2, excluding that ending
+# get the unique list of prefixes of file names starting by $1, ending
+# by $2, excluding that ending
 uniq_prefixes() {
-    for ef in $1/*$2; do
+    for ef in ${1}*$2; do
         echo ${ef%$2}
+    done | sort -u
+}
+
+# get the unique list of suffixes starting by $1, ending by $2,
+# excluding that start
+uniq_suffixes() {
+    for ef in ${1}*$2; do
+        echo ${ef#$1}
     done | sort -u
 }
 
@@ -126,5 +134,13 @@ mean_group() {
             content+=",$mean"
         done
         echo $content
+    done
+}
+
+# append CSV files without duplicating the header
+appendCSVFiles() {
+    head -n 1 "$1"
+    for a_i in $(seq 1 $#); do
+        tail -n +2 ${!a_i}
     done
 }
