@@ -54,7 +54,7 @@ echo "$header"
 #################
 # write content #
 #################
-res_dir=$exp_dir/res
+anal_dir=$exp_dir/anal
 data_dir=$exp_dir/data
 for fold in $(seq 1 $Kfd); do
     fds=${fold}to${Kfd}
@@ -65,7 +65,7 @@ for fold in $(seq 1 $Kfd); do
         ##########
         for pre_nfeats in ${nfeats_seq[@]}; do
             for pre_conf in ${conf_seq[@]}; do
-                fn="$res_dir/${rs}_fd_${fds}_"
+                fn="$anal_dir/${rs}_fd_${fds}_"
                 if [[ $pfs_algo == hc ]]; then
                     fn+="conf_$pre_conf"
                 else
@@ -114,7 +114,7 @@ for fold in $(seq 1 $Kfd); do
                     for seed in ${seed_seq[@]}; do
                         for smp_pbty in ${smp_pbty_seq[@]}; do
                             for fsm_scorer in ${fsm_scorer_seq[@]}; do
-                                fn="$res_dir/${rs}_fd_${fds}_"
+                                fn="$anal_dir/${rs}_fd_${fds}_"
                                 if [[ $fsm_algo == hc ]]; then
                                     fn+="fsm_conf_${fsm_conf}"
                                 else

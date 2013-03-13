@@ -64,7 +64,15 @@ run
 
     <fs-moses-bio-experiments>/scripts/anal_exp.sh <fs-moses-bio-experiments>/settings/MY_SETTINGS &> MY_EXP_ANALYSIS.log
 
-That script is gonna create more intermediary files and finally under
-$exp_dir 2 files: results.csv, the results in terms of precision,
-recall and diversity of all experiments.  avg_results.csv, averaging
-of results.csv across all folds and random seeds.
+That script is gonna create a directory
+
+    MY_EXPERIMENTS/anal
+
+and fill it with intermediary files, and finally under $exp_dir, 2
+files:
+
+1. results.csv, the results in terms of precision, recall and
+diversity of all experiments.
+
+2. avg_results.csv, averaging of results.csv across all folds and
+random seeds.

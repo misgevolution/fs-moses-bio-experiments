@@ -17,8 +17,13 @@ PROG_DIR=$(dirname "$PROG_PATH")
 
 set -x
 
+mkdir $exp_dir/anal
+
 # Eval the output of all candidates for train and test
 $PROG_DIR/eval_all_moses_output.sh $1
+
+# Append all folded tests
+$PROG_DIR/append_test_fold.sh $1
 
 # Eval all outputs and sum them up in stats files
 $PROG_DIR/eval_train_test_mean_score.sh $1

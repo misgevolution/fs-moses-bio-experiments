@@ -22,12 +22,12 @@ PROG_DIR=$(dirname "$PROG_PATH")
 bnd=$(basename $dataset)
 
 for rand in ${rand_seq[@]}; do
-    for s in $(uniq_suffixes "$exp_dir/res/r${rand}_fd_*_" "_test.csv"); do
+    for s in $(uniq_suffixes "$exp_dir/anal/r${rand}_fd_*_" "_test.csv"); do
         CMD="appendCSVFiles"
         for fd in $(seq 1 $Kfd); do
-            CMD+=" $fd"
+            CMD+=" $exp_dir/anal/r${rand}_fd_${fd}to${Kfd}_$s"
         done
-        ofile="$dir_exp/res/r${rand}_$s"
+        ofile="$exp_dir/anal/r${rand}_$s"
         $CMD > $ofile
     done
 done

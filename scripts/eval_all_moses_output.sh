@@ -15,7 +15,7 @@ PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
 # Parse all moses output files
-find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} \;
+find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} $exp_dir/anal \;
 
 # Evaluate each combo program
 bnd=$(basename $dataset)
@@ -26,7 +26,7 @@ if [[ $Kfd > 1 ]]; then
 fi
 
 for fd in $(seq 1 $Kfd); do
-    for cfile in $exp_dir/res/*${fd}to${Kfd}*.combo; do
+    for cfile in $exp_dir/anal/*${fd}to${Kfd}*.combo; do
         for smp in $samples; do
             ifile="$exp_dir/data/${bnd}.${smp}_${fd}to${Kfd}"
             ofile=$(chg_ext $(ibe "$cfile" _$smp) csv)

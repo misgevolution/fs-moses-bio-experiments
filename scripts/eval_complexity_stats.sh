@@ -18,9 +18,7 @@ PROG_PATH=$(readlink -f "$0")
 PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
-r1_fd_10to10_fsm_conf_-0.1_focus_active_seed_init_smp_pbty_0.1_fsm_algo_hc_fsm_scorer_mi.moses
-
 for m in $exp_dir/res/*.moses; do
-    ofile=$(chg_ext $m complexity)
-    grep complexity: $m | cut -d" " -f 2 | stats > $ofile
+    ofile_base=$(chg_ext $(basename $m) complexity)
+    grep complexity: $m | cut -d" " -f 2 | stats > $exp_dir/anal/$ofile_base
 done
