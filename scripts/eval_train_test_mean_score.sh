@@ -19,19 +19,21 @@ PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
 bnd=$(basename $dataset)
+lds=$exp_dir/data/$bnd  # local copy of dataset
 
 samples="train"
 if [[ $Kfd > 1 ]]; then
     samples+=" test"
 fi
 
+# produce stats for train and test
 for smp in $samples; do
     for p in $(uniq_prefixes "$exp_dir/anal/" "_cnd_*_${smp}.csv"); do
         fold=$(grep '[0-9]*to[0-9]*' <(echo "$p") -o)
-        if [[ $fold == "" ]]; then
-            continue
+        actual_file=$lds
+        if [[ $fold != "" ]]; then # folded test file
+            actual_file+=".${smp}_$fold"
         fi
-        actual_file=$exp_dir/data/$bnd.${smp}_$fold
         for sc in precision recall; do
             for cnd in $(seq 0 $(($candidates - 1))); do
                 prediction_file=${p}_cnd_${cnd}_${smp}.csv
