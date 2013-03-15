@@ -54,6 +54,7 @@ ei=0
 CMD="moses"
 for r in ${rand_seq[@]}; do
     for fd in $(seq 1 $Kfd); do
+        ar=$((fd + r*Kfd))
 
         echo
         echo "~~~~ validation $fd/$Kfd ~~~~"
@@ -62,7 +63,7 @@ for r in ${rand_seq[@]}; do
         ifile=$exp_dir/data/$baseif
 
         # general program options
-        GPO="-r $r -j $jobs -l debug -V 1 -W 1 -x 1 -t 1 -c $candidates"
+        GPO="-r $ar -j $jobs -l debug -V 1 -W 1 -x 1 -t 1 -c $candidates"
 
         # learning program options
         LPO="-H $scorer"
@@ -98,7 +99,7 @@ for r in ${rand_seq[@]}; do
                 echo "$message"
                 date
 
-                learn_base_name_no_fs="r${r}_fd_${fd}to${Kfd}_"
+                learn_base_name_no_fs="r${ar}_fd_${fd}to${Kfd}_"
                 if [[ $pfs_algo == hc ]]; then
                     learn_base_name_no_fs+="conf_${conf}"
                 else
@@ -164,7 +165,7 @@ for r in ${rand_seq[@]}; do
                                 echo
                                 echo "$message"
                                 date
-                                learn_base_name="r${r}_fd_${fd}to${Kfd}_"
+                                learn_base_name="r${ar}_fd_${fd}to${Kfd}_"
                                 if [[ $fsm_algo == hc ]]; then
                                     learn_base_name+="fsm_conf_${fsm_conf}"
                                 else
