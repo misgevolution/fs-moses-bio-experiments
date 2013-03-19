@@ -23,5 +23,5 @@ for p in $(uniq_prefixes "$exp_dir/anal/" "_cnd_*_train.csv"); do
     done
     CMD+=" -o $p.diversity"
     echo "$CMD"
-    $CMD
-done
+    # $CMD
+done | $PPAR

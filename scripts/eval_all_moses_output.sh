@@ -14,6 +14,9 @@ PROG_PATH=$(readlink -f "$0")
 PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
+set -u                       # error on unassigned variables
+# set -x                          # debug
+
 # Parse all moses output files
 find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} $exp_dir/anal \;
 
@@ -32,7 +35,7 @@ for fd in $(seq 1 $Kfd); do
             ofile=$(chg_ext $(ibe "$cfile" _$smp) csv)
             CMD="eval-table -i $ifile -C $cfile -o $ofile --labels 1 -u out"
             echo "$CMD"
-            $CMD
+            # $CMD
         done
     done
-done
+done | $PPAR

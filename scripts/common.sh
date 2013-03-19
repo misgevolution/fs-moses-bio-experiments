@@ -144,3 +144,7 @@ appendCSVFiles() {
         tail -n +2 ${!a_i}
     done
 }
+
+# commands for parallelizing work
+readonly PPAR="parallel -j$jobs -k -v" # pipe in the commands
+readonly XPAR="parallel -j$jobs --xapply -k" # build commands with arguments

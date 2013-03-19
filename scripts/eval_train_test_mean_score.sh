@@ -4,7 +4,7 @@
 # test
 
 set -u                       # error on unassigned variables
-set -x                          # debug
+# set -x                          # debug
 
 if [[ $# != 1 ]]; then
     echo "Error: wrong number of command parameters"
@@ -31,7 +31,7 @@ for smp in $samples; do
     for p in $(uniq_prefixes "$exp_dir/anal/" "_cnd_*_${smp}.csv"); do
         fold=$(grep '[0-9]*to[0-9]*' <(echo "$p") -o)
         actual_file=$lds
-        if [[ $fold != "" ]]; then # folded test file
+        if [[ $fold != "" ]]; then # not folded test file
             actual_file+=".${smp}_$fold"
         fi
         for sc in precision recall; do

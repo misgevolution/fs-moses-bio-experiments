@@ -30,7 +30,7 @@ fi
 # write header #
 ################
 # settings
-header="fold,rand"
+header="fold,"
 if [[ $pfs_algo == hc ]]; then
     header+=",pre_conf"
 else
@@ -51,6 +51,8 @@ done
 header+=",diversity,complexity"
 echo "$header"
 
+
+
 #################
 # write content #
 #################
@@ -58,96 +60,94 @@ anal_dir=$exp_dir/anal
 data_dir=$exp_dir/data
 for fold in $(seq 1 $Kfd); do
     fds=${fold}to${Kfd}
-    for rand in ${rand_seq[@]}; do
-        rs=r$rand
-        ##########
-        # No fsm #
-        ##########
-        for pre_nfeats in ${nfeats_seq[@]}; do
-            for pre_conf in ${conf_seq[@]}; do
-                fn="$anal_dir/${rs}_fd_${fds}_"
-                if [[ $pfs_algo == hc ]]; then
-                    fn+="conf_$pre_conf"
-                else
-                    fn+="nfeats_$pre_nfeats"
-                fi
-                fn+="_no_fsm"
-                # settings
-                content="$fold,$rand,"
-                if [[ $pfs_algo == hc ]]; then
-                    content+="$pre_conf"
-                else
-                    content+="$pre_nfeats"
-                fi
-                content+=",none,none"
-                # score
-                for smp in $samples; do
-                    for sc in precision recall; do
-                        sc_file=${fn}_${smp}_${sc}.stats
-                        sc_mean=$(grep_stat mean $sc_file)
-                        content+=",$sc_mean"
-                    done
+    ##########
+    # No fsm #
+    ##########
+    for pre_nfeats in ${nfeats_seq[@]}; do
+        for pre_conf in ${conf_seq[@]}; do
+            fn="$anal_dir/fd_${fds}_"
+            if [[ $pfs_algo == hc ]]; then
+                fn+="conf_$pre_conf"
+            else
+                fn+="nfeats_$pre_nfeats"
+            fi
+            fn+="_no_fsm"
+            # settings
+            content="$fold,"
+            if [[ $pfs_algo == hc ]]; then
+                content+="$pre_conf"
+            else
+                content+="$pre_nfeats"
+            fi
+            content+=",none,none"
+            # score
+            for smp in $samples; do
+                for sc in precision recall; do
+                    sc_file=${fn}_${smp}_${sc}.stats
+                    sc_mean=$(grep_stat mean $sc_file)
+                    content+=",$sc_mean"
                 done
-                # diversity
-                dfile=${fn}.diversity
-                dmean=$(grep_stat mean $dfile)
-                content+=",$dmean"
-                # complexity
-                cfile=${fn}.complexity
-                cmean=$(grep_stat mean $cfile)
-                content+=",$cmean"
-                # print content
-                echo "$content"
             done
+            # diversity
+            dfile=${fn}.diversity
+            dmean=$(grep_stat mean $dfile)
+            content+=",$dmean"
+            # complexity
+            cfile=${fn}.complexity
+            cmean=$(grep_stat mean $cfile)
+            content+=",$cmean"
+            # print content
+            echo "$content"
         done
+    done
 
-        #######
-        # Fsm #
-        #######
-        if [[ $no_fsm == true ]]; then
-            continue            # skip fsm experiments
-        fi
+    #######
+    # Fsm #
+    #######
+    if [[ $no_fsm == true ]]; then
+        continue            # skip fsm experiments
+    fi
         
-        for fsm_nfeats in ${fsm_nfeats_seq[@]}; do
-            for fsm_conf in ${fsm_conf_seq[@]}; do
-                for focus in ${focus_seq[@]}; do
-                    for seed in ${seed_seq[@]}; do
-                        for smp_pbty in ${smp_pbty_seq[@]}; do
-                            for fsm_scorer in ${fsm_scorer_seq[@]}; do
-                                fn="$anal_dir/${rs}_fd_${fds}_"
-                                if [[ $fsm_algo == hc ]]; then
-                                    fn+="fsm_conf_${fsm_conf}"
-                                else
-                                    fn+="fsm_nfeats_${fsm_nfeats}"
-                                fi
-                                fn+="_focus_${focus}_seed_${seed}_smp_pbty_${smp_pbty}_fsm_algo_${fsm_algo}_fsm_scorer_${fsm_scorer}"
-                                # settings
-                                content="$fold,$rand,all,"
-                                if [[ $fsm_algo == hc ]]; then
-                                    content+="$fsm_conf"
-                                else
-                                    content+="$fsm_nfeats"
-                                fi
-                                content+=",$focus"
-                                # score
-                                for smp in $samples; do
-                                    for sc in precision recall; do
-                                        sc_file=${fn}_${smp}_${sc}.stats
-                                        sc_mean=$(grep_stat mean $sc_file)
-                                        content+=",$sc_mean"
-                                    done
+    for fsm_nfeats in ${fsm_nfeats_seq[@]}; do
+        for fsm_conf in ${fsm_conf_seq[@]}; do
+            for focus in ${focus_seq[@]}; do
+                for seed in ${seed_seq[@]}; do
+                    for smp_pbty in ${smp_pbty_seq[@]}; do
+                        for fsm_scorer in ${fsm_scorer_seq[@]}; do
+                            fn="$anal_dir/fd_${fds}_"
+                            if [[ $fsm_algo == hc ]]; then
+                                fn+="fsm_conf_${fsm_conf}"
+                            else
+                                fn+="fsm_nfeats_${fsm_nfeats}"
+                            fi
+                            fn+="_focus_${focus}_seed_${seed}_smp_pbty_${smp_pbty}_fsm_algo_${fsm_algo}_fsm_scorer_${fsm_scorer}"
+                            # settings
+                            content="$fold,"
+                            content+="all,"
+                            if [[ $fsm_algo == hc ]]; then
+                                content+="$fsm_conf"
+                            else
+                                content+="$fsm_nfeats"
+                            fi
+                            content+=",$focus"
+                            # score
+                            for smp in $samples; do
+                                for sc in precision recall; do
+                                    sc_file=${fn}_${smp}_${sc}.stats
+                                    sc_mean=$(grep_stat mean $sc_file)
+                                    content+=",$sc_mean"
                                 done
-                                # diversity
-                                dfile=${fn}.diversity
-                                dmean=$(grep_stat mean $dfile)
-                                content+=",$dmean"
-                                # complexity
-                                cfile=${fn}.complexity
-                                cmean=$(grep_stat mean $cfile)
-                                content+=",$cmean"
-                                # print content
-                                echo "$content"
                             done
+                            # diversity
+                            dfile=${fn}.diversity
+                            dmean=$(grep_stat mean $dfile)
+                            content+=",$dmean"
+                            # complexity
+                            cfile=${fn}.complexity
+                            cmean=$(grep_stat mean $cfile)
+                            content+=",$cmean"
+                            # print content
+                            echo "$content"
                         done
                     done
                 done
