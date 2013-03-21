@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Parse and evaluate all models obtained during the experiment
+# Evaluate all models obtained during the experiment
 
 if [[ $# != 1 ]]; then
     echo "Error: wrong number of command parameters"
@@ -16,9 +16,6 @@ PROG_DIR=$(dirname "$PROG_PATH")
 
 set -u                       # error on unassigned variables
 # set -x                          # debug
-
-# Parse all moses output files
-find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} $exp_dir/anal \;
 
 # Evaluate each combo program
 bnd=$(basename $dataset)

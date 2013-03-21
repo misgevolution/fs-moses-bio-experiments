@@ -15,12 +15,19 @@ PROG_PATH=$(readlink -f "$0")
 PROG_DIR=$(dirname "$PROG_PATH")
 . $PROG_DIR/common.sh
 
+set -u
 set -x
 
 mkdir $exp_dir/anal
 
+# Parse all moses output files
+find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} $exp_dir/anal \;
+
 # Eval the output of all candidates for train and test
 $PROG_DIR/eval_all_moses_output.sh $1
+
+# Eval the likelihood all candidates
+$PROG_DIR/eval_likelihoods.sh $1
 
 # Append all folded tests
 $PROG_DIR/append_test_fold.sh $1

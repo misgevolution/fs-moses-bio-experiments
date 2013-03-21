@@ -57,7 +57,7 @@ for fd in $(seq 1 $Kfd); do
 
     echo
     echo "~~~~ validation $fd/$Kfd ~~~~"
-        
+
     baseif=${bnd}.train_${fd}to${Kfd}
     ifile=$exp_dir/data/$baseif
 
@@ -79,7 +79,7 @@ for fd in $(seq 1 $Kfd); do
     LPO+=" --diversity-pressure $dpressure"
     LPO+=" --diversity-exponent $dexp"
     LPO+=" --diversity-dst $dst"
-        
+
     #####################
     # Learning (no fsm) #
     #####################
