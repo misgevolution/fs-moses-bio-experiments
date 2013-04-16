@@ -31,8 +31,8 @@ for fd in $(seq 1 $Kfd); do
         CMD+=" -p $model_combination_noise"
         CMD+=" --complexity-amplifier $complexity_amplifier"
         CMD+=" -n 1"
-        CMD+=" --prerec-min-recall $recall_min"
-        if [[ prerec_simple_precision == true ]]; then
+        CMD+=" --prerec-min-recall $model_combination_min_recall"
+        if [[ $prerec_simple_precision == true ]]; then
             CMD+=" --prerec-simple-precision 1"
         else
             CMD+=" --prerec-simple-precision 0"

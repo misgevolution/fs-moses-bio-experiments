@@ -44,10 +44,11 @@ else
 fi
 header+=",focus"
 # results
-for smp in $samples; do
-    for sc in precision recall; do
+for sc in precision recall; do
+    for smp in $samples; do
         header+=",${sc}_${smp}"
     done
+    header+=",combined_${sc}_${smp}"
 done
 header+=",diversity,complexity"
 echo "$header"
@@ -79,12 +80,14 @@ for pre_nfeats in ${nfeats_seq[@]}; do
         fi
         content+=",none,none"
         # score
-        for smp in $samples; do
-            for sc in precision recall; do
+        for sc in precision recall; do
+            for smp in $samples; do
                 sc_file=${fn}_${smp}_${sc}.stats
                 sc_mean=$(grep_stat mean $sc_file)
                 content+=",$sc_mean"
             done
+            # combined
+            content+=",$(cat ${fn}_combined.${sc})"
         done
         # diversity
         dfile=${fn}.diversity
@@ -129,12 +132,14 @@ for fsm_nfeats in ${fsm_nfeats_seq[@]}; do
                         fi
                         content+=",$focus"
                         # score
-                        for smp in $samples; do
-                            for sc in precision recall; do
+                        for sc in precision recall; do
+                            for smp in $samples; do
                                 sc_file=${fn}_${smp}_${sc}.stats
                                 sc_mean=$(grep_stat mean $sc_file)
                                 content+=",$sc_mean"
                             done
+                            # combined
+                            content+=",$(cat ${fn}_combined.${sc})"
                         done
                         # diversity
                         dfile=${fn}.diversity

@@ -26,13 +26,12 @@ if [[ $Kfd > 1 ]]; then
 fi
 
 for fd in $(seq 1 $Kfd); do
-    for cfile in $exp_dir/anal/*${fd}to${Kfd}*.combo; do
+    for cfile in $exp_dir/anal/fd_${fd}to${Kfd}*.combo; do
         for smp in $samples; do
             ifile="$exp_dir/data/${bnd}.${smp}_${fd}to${Kfd}"
             ofile=$(chg_ext $(ibe "$cfile" _$smp) csv)
             CMD="eval-table -i $ifile -C $cfile -o $ofile --labels 1 -u out"
             echo "$CMD"
-            # $CMD
         done
     done
 done | $PPAR

@@ -5,7 +5,7 @@
 # compute test precision
 
 set -u                       # error on unassigned variables
-# set -x                          # debug
+set -x                          # debug
 
 if [[ $# != 1 ]]; then
     echo "Error: wrong number of command parameters"
@@ -25,6 +25,15 @@ AN_DIR="$exp_dir/anal"
 
 prefix="$AN_DIR/fd_*_"
 for s in $(uniq_suffixes "$prefix" "_test.csv"); do
+    CMD="appendCSVFiles"
+    for fd in $(seq 1 $Kfd); do
+        CMD+=" $AN_DIR/fd_${fd}to${Kfd}_$s"
+    done
+    ofile="$AN_DIR/$s"
+    $CMD > $ofile
+done
+
+for s in $(uniq_suffixes "$prefix" "_combined.csv"); do
     CMD="appendCSVFiles"
     for fd in $(seq 1 $Kfd); do
         CMD+=" $AN_DIR/fd_${fd}to${Kfd}_$s"

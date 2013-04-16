@@ -21,7 +21,9 @@ set -x
 mkdir $exp_dir/anal
 
 # Parse all moses output files
-find $exp_dir/res -name "*.moses" -exec $PROG_DIR/parse_moses_output.sh {} $exp_dir/anal \;
+for mfile in $exp_dir/res/*.moses; do
+    echo "$PROG_DIR/parse_moses_output.sh $mfile $exp_dir/anal"
+done | $PPAR
 
 # Eval the output of all candidates for train and test
 $PROG_DIR/eval_all_moses_output.sh $1
@@ -29,10 +31,14 @@ $PROG_DIR/eval_all_moses_output.sh $1
 # Eval the likelihood all candidates
 $PROG_DIR/eval_likelihoods.sh $1
 
+# Combine all models (produce files ending by _combined.csv)
+$PROG_DIR/combine_models.sh $1
+
 # Append all folded tests
 $PROG_DIR/append_test_fold.sh $1
 
-# Eval all outputs and sum them up in stats files
+# Eval all outputs and sum them up in stats files, .precision and
+# .recall files for combined models
 $PROG_DIR/eval_train_test_mean_score.sh $1
 
 # Eval the diversity of the top 10 candidates for each experiment
@@ -44,14 +50,5 @@ $PROG_DIR/eval_complexity_stats.sh $1
 # Average folded stats
 $PROG_DIR/average_folded_stats.sh $1
 
-# Create CSV file with the results of all experiments
-$PROG_DIR/gather_scores_diversities_complexities.sh $1 > $exp_dir/results.csv
-
 # Create CSV file with the results of all experiments already folded
-$PROG_DIR/gather_scores_diversities_complexities_NEW.sh $1 > $exp_dir/results_NEW.csv
-
-# Summarize the CSV file averaging over folds and random seeds
-$PROG_DIR/group_mean_by_settings.sh $1 $exp_dir/results.csv > $exp_dir/avg_results.csv
-
-# Summarize the CSV file averaging over folds and random seeds folded
-$PROG_DIR/group_mean_by_settings.sh $1 $exp_dir/results_NEW.csv > $exp_dir/avg_results_NEW.csv
+$PROG_DIR/gather_scores_diversities_complexities_NEW.sh $1 > $exp_dir/results.csv

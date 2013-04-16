@@ -52,6 +52,15 @@ uniq_suffixes() {
     done | sort -u
 }
 
+# get the unique list of infixes starting by $1, ending by $2,
+# excluding that start and ending
+uniq_infixes() {
+    for ef in ${1}*$2; do
+        suffix=${ef#$1}
+        echo ${suffix%$2}
+    done | sort -u
+}
+
 # takes 2 files
 #
 # $1: actual
