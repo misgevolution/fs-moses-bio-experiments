@@ -6,6 +6,13 @@ Set of scripts to run some feature selection within MOSES bio experiments
 Requirements
 ------------
 
+- stats, you must compile it yourself, follow the instructions below
+    - mkdir stats; cd stats # create a stats directory on your machine
+    - wget http://web.cs.wpi.edu/~claypool/misc/stats/stats.tgz # download stats.tgz
+    - tar xvzf stats.tgz # unpack it
+    - make # compile
+    - sudo cp stats /usr/bin # copy to your system binary dir
+
 - csvtool (should be available in your distro repository), otherwise
   https://forge.ocamlcore.org/projects/csv/
 
